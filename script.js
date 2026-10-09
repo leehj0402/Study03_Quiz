@@ -202,7 +202,75 @@ function renderStart(app) {
 }
 
 function renderQuiz(app) {
-  /* Task 11에서 채운다 */
+  var q = currentQuestion();
+  if (!q) return;
+
+  var prog = document.createElement('p');
+  prog.className = 'progress';
+  prog.textContent = (state.index + 1) + ' / ' + state.deck.length;
+  app.appendChild(prog);
+
+  var qt = document.createElement('h1');
+  qt.className = 'question';
+  qt.textContent = q.question;
+  app.appendChild(qt);
+
+  var list = document.createElement('div');
+  list.className = 'choices';
+  var picked = state.revealed ? state.answers[state.answers.length - 1].picked : null;
+
+  q.choices.forEach(function (c) {
+    var btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.textContent = c.text;
+    if (state.revealed) {
+      btn.disabled = true;
+      if (c.correct) btn.className += ' correct';
+      else if (c.text === picked) btn.className += ' wrong';
+    } else {
+      btn.onclick = function () { answer(c); };
+    }
+    list.appendChild(btn);
+  });
+  app.appendChild(list);
+
+  if (state.revealed) app.appendChild(buildExplanation(q));
+}
+
+function buildExplanation(q) {
+  var last = state.answers[state.answers.length - 1];
+  var box = document.createElement('section');
+  box.className = 'explain ' + (last.correct ? 'ok' : 'bad');
+
+  var verdict = document.createElement('p');
+  verdict.className = 'verdict';
+  verdict.textContent = last.correct ? '정답입니다'
+    : (last.timedOut ? '시간이 지났습니다 — 오답' : '오답입니다');
+  box.appendChild(verdict);
+
+  var exp = document.createElement('p');
+  exp.textContent = q.explanation;
+  box.appendChild(exp);
+
+  var src = document.createElement('p');
+  src.className = 'source';
+  src.textContent = '출처: ';
+  var link = document.createElement('a');
+  link.href = q.source.url;
+  link.target = '_blank';
+  link.rel = 'noopener';
+  link.textContent = q.source.name;
+  src.appendChild(link);
+  src.appendChild(document.createTextNode(' (' + q.source.checkedOn + ' 확인)'));
+  box.appendChild(src);
+
+  var btn = document.createElement('button');
+  btn.className = 'next';
+  btn.textContent = state.index + 1 >= state.deck.length ? '결과 보기' : '다음';
+  btn.onclick = function () { next(); };
+  box.appendChild(btn);
+
+  return box;
 }
 
 function renderResult(app) {

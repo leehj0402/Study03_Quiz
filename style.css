@@ -19,3 +19,14 @@ button:disabled { opacity: .5; cursor: default; }
 @media (min-width: 480px) {
   .categories button { display: inline-block; width: auto; }
 }
+
+.progress { color: #777; font-size: .9rem; margin: 0; }
+.question { font-size: 1.25rem; }
+.choices button { display: block; width: 100%; text-align: left; }
+.choice.correct { border-color: #2e7d32; background: #e8f5e9; font-weight: 600; }
+.choice.wrong { border-color: #c62828; background: #ffebee; }
+.explain { margin-top: 16px; padding: 12px; border-radius: 8px; border: 1px solid #ddd; }
+.explain.ok { background: #f1f8e9; }
+.explain.bad { background: #fff3e0; }
+.verdict { font-weight: 700; margin-top: 0; }
+.source { font-size: .85rem; color: #555; }
