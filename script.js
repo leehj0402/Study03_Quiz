@@ -6,7 +6,31 @@ var CATEGORIES = [
   { key: 'arts_culture',    label: '예술과 문화' }
 ];
 
+var MODES = {
+  practice: {
+    key: 'practice', label: '연습',
+    timeLimit: null, hint: false,
+    scoreOnCorrect: 1, scoreWithHint: null,
+    record: false, retryWrong: true
+  }
+};
+
 /* ===== 2. 순수 함수 ===== */
+function pointsFor(rule, result) {
+  if (!result.correct) return 0;
+  return result.usedHint ? rule.scoreWithHint : rule.scoreOnCorrect;
+}
+
+function totalScore(answers) {
+  var sum = 0;
+  for (var i = 0; i < answers.length; i++) sum += answers[i].points;
+  return sum;
+}
+
+function formatScore(n) {
+  return String(n) + ' / 10';
+}
+
 function validateQuestions(data) {
   var errors = [];
   CATEGORIES.forEach(function (cat) {
@@ -134,6 +158,25 @@ test('validateQuestions: 카테고리당 10개가 아니면 잡는다', function
   var data = { korean_history: [], world_geography: [], science: [], arts_culture: [] };
   var errors = validateQuestions(data);
   assertTrue(errors.join(' ').indexOf('10개') !== -1, errors.join(' '));
+});
+
+test('pointsFor: 오답은 모든 모드에서 0점', function () {
+  assertEqual(pointsFor(MODES.practice, { correct: false, usedHint: false }), 0, 'practice');
+});
+
+test('pointsFor: 연습 정답은 1점', function () {
+  assertEqual(pointsFor(MODES.practice, { correct: true, usedHint: false }), 1);
+});
+
+test('totalScore: 점수를 더한다', function () {
+  assertEqual(totalScore([{ points: 1 }, { points: 0 }, { points: 1 }]), 2);
+  assertEqual(totalScore([]), 0);
+});
+
+test('formatScore: N / 10 형태로 적는다', function () {
+  assertEqual(formatScore(7), '7 / 10');
+  assertEqual(formatScore(10), '10 / 10');
+  assertEqual(formatScore(0), '0 / 10');
 });
 
 test('questions.js 문항이 규칙을 지킨다', function () {
