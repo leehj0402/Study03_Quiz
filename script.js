@@ -76,6 +76,11 @@ function removeTwoWrong(choices) {
   return choices.filter(function (c) { return drop.indexOf(c) === -1; });
 }
 
+function collectWrong(answers) {
+  return answers.filter(function (a) { return !a.correct; })
+                .map(function (a) { return a.id; });
+}
+
 function validateQuestions(data) {
   var errors = [];
   CATEGORIES.forEach(function (cat) {
@@ -119,7 +124,8 @@ var state = {
   removed: [],
   timeLeft: null,
   timerId: null,
-  isRetry: false
+  isRetry: false,
+  baseResult: null
 };
 
 function currentQuestion() {
@@ -137,6 +143,7 @@ function startRound(modeKey, categoryKey) {
   state.hintUsed = false;
   state.removed = [];
   state.isRetry = false;
+  state.baseResult = null;
   startTimer();
   render();
 }
@@ -172,6 +179,32 @@ function next() {
   } else {
     startTimer();
   }
+  render();
+}
+
+function startRetry() {
+  var wrongIds = collectWrong(state.answers);
+  if (!wrongIds.length) return;
+
+  if (!state.isRetry) {
+    state.baseResult = {
+      score: totalScore(state.answers),
+      total: state.deck.length
+    };
+  }
+
+  var full = buildDeck(state.category);
+  state.deck = shuffle(full.filter(function (q) {
+    return wrongIds.indexOf(q.id) !== -1;
+  }));
+  state.index = 0;
+  state.answers = [];
+  state.revealed = false;
+  state.hintUsed = false;
+  state.removed = [];
+  state.isRetry = true;
+  state.screen = 'quiz';
+  startTimer();
   render();
 }
 
@@ -326,8 +359,18 @@ function renderResult(app) {
 
   var score = document.createElement('p');
   score.className = 'score';
-  score.textContent = formatScore(totalScore(state.answers));
-  app.appendChild(score);
+  if (state.isRetry && state.baseResult) {
+    score.textContent = formatScore(state.baseResult.score);
+    app.appendChild(score);
+    var retryNote = document.createElement('p');
+    retryNote.className = 'retry-note';
+    var hit = state.answers.filter(function (a) { return a.correct; }).length;
+    retryNote.textContent = '다시 푼 ' + state.answers.length + '문항 중 ' + hit + '문항 정답';
+    app.appendChild(retryNote);
+  } else {
+    score.textContent = formatScore(totalScore(state.answers));
+    app.appendChild(score);
+  }
 
   if (!rule.record) {
     var note = document.createElement('p');
@@ -356,6 +399,14 @@ function renderResult(app) {
   });
   app.appendChild(list);
 
+  if (rule.retryWrong && collectWrong(state.answers).length > 0) {
+    var retry = document.createElement('button');
+    retry.className = 'retry';
+    retry.textContent = '틀린 문제 다시 풀기 (' + collectWrong(state.answers).length + '문항)';
+    retry.onclick = startRetry;
+    app.appendChild(retry);
+  }
+
   var again = document.createElement('button');
   again.className = 'again';
   again.textContent = '같은 카테고리 다시 풀기';
@@ -381,7 +432,9 @@ function goHome() {
   state.answers = [];
   state.revealed = false;
   state.hintUsed = false;
+  state.removed = [];
   state.isRetry = false;
+  state.baseResult = null;
   render();
 }
 
@@ -838,6 +891,56 @@ test('next: 다음 문항에서 힌트가 다시 쓸 수 있다', function () {
   next();
   assertEqual(state.hintUsed, false);
   assertEqual(visibleChoices().length, 4);
+});
+
+test('collectWrong: 틀린 문항 id만 모은다', function () {
+  var answers = [
+    { id: 'a', correct: true }, { id: 'b', correct: false },
+    { id: 'c', correct: false }, { id: 'd', correct: true }
+  ];
+  assertEqual(collectWrong(answers), ['b', 'c']);
+});
+
+test('collectWrong: 만점이면 빈 배열', function () {
+  assertEqual(collectWrong([{ id: 'a', correct: true }]), []);
+});
+
+test('startRetry: 틀린 문항만으로 판을 만든다', function () {
+  startRound('practice', 'science');
+  var wrongIds = [];
+  for (var i = 0; i < 10; i++) {
+    var pick = i < 4
+      ? currentQuestion().choices.filter(function (c) { return !c.correct; })[0]
+      : currentQuestion().choices.filter(function (c) { return c.correct; })[0];
+    if (i < 4) wrongIds.push(currentQuestion().id);
+    answer(pick);
+    next();
+  }
+  var baseScore = totalScore(state.answers);
+  assertEqual(baseScore, 6, '원래 점수');
+  startRetry();
+  assertEqual(state.isRetry, true);
+  assertEqual(state.deck.length, 4);
+  assertEqual(state.deck.map(function (q) { return q.id; }).sort(), wrongIds.sort());
+  assertEqual(state.baseResult.score, 6, '원래 점수가 보관되지 않았다');
+});
+
+test('startRetry: 재도전은 원래 점수를 바꾸지 않는다', function () {
+  startRound('practice', 'science');
+  for (var i = 0; i < 10; i++) {
+    var wrong = currentQuestion().choices.filter(function (c) { return !c.correct; })[0];
+    answer(wrong);
+    next();
+  }
+  assertEqual(totalScore(state.answers), 0, '원래 점수');
+  startRetry();
+  for (var j = 0; j < 10; j++) {
+    var correct = currentQuestion().choices.filter(function (c) { return c.correct; })[0];
+    answer(correct);
+    next();
+  }
+  assertEqual(state.baseResult.score, 0, '원래 점수가 바뀌었다');
+  assertEqual(totalScore(state.answers), 10, '재도전 판 집계');
 });
 
 test('questions.js 문항이 규칙을 지킨다', function () {

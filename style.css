@@ -42,3 +42,6 @@ button:disabled { opacity: .5; cursor: default; }
 .timer.urgent { color: #c62828; }
 
 .hint { border-color: #ef6c00; color: #ef6c00; }
+
+.retry-note { color: #1565c0; font-weight: 600; margin: 0 0 8px; }
+.retry { border-color: #1565c0; color: #1565c0; }
