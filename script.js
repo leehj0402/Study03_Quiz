@@ -12,6 +12,18 @@ var MODES = {
     timeLimit: null, hint: false,
     scoreOnCorrect: 1, scoreWithHint: null,
     record: false, retryWrong: true
+  },
+  speed: {
+    key: 'speed', label: '스피드',
+    timeLimit: 15, hint: false,
+    scoreOnCorrect: 1, scoreWithHint: null,
+    record: true, retryWrong: false
+  },
+  hint: {
+    key: 'hint', label: '힌트',
+    timeLimit: null, hint: true,
+    scoreOnCorrect: 1, scoreWithHint: 0.5,
+    record: true, retryWrong: false
   }
 };
 
@@ -461,6 +473,41 @@ test('formatScore: N / 10 형태로 적는다', function () {
   assertEqual(formatScore(7), '7 / 10');
   assertEqual(formatScore(10), '10 / 10');
   assertEqual(formatScore(0), '0 / 10');
+});
+
+test('pointsFor: 오답은 스피드·힌트에서도 0점', function () {
+  assertEqual(pointsFor(MODES.speed, { correct: false, usedHint: false }), 0, 'speed');
+  assertEqual(pointsFor(MODES.hint, { correct: false, usedHint: true }), 0, 'hint 사용 오답');
+  assertEqual(pointsFor(MODES.hint, { correct: false, usedHint: false }), 0, 'hint 미사용 오답');
+});
+
+test('pointsFor: 스피드 정답은 1점', function () {
+  assertEqual(pointsFor(MODES.speed, { correct: true, usedHint: false }), 1);
+});
+
+test('pointsFor: 힌트를 쓰고 맞히면 0.5점', function () {
+  assertEqual(pointsFor(MODES.hint, { correct: true, usedHint: true }), 0.5);
+});
+
+test('pointsFor: 힌트를 안 쓰고 맞히면 1점', function () {
+  assertEqual(pointsFor(MODES.hint, { correct: true, usedHint: false }), 1);
+});
+
+test('MODES: 기록 대상은 스피드·힌트뿐', function () {
+  assertEqual(MODES.practice.record, false);
+  assertEqual(MODES.speed.record, true);
+  assertEqual(MODES.hint.record, true);
+});
+
+test('MODES: 재도전은 연습만', function () {
+  assertEqual(MODES.practice.retryWrong, true);
+  assertEqual(MODES.speed.retryWrong, false);
+  assertEqual(MODES.hint.retryWrong, false);
+});
+
+test('formatScore: 0.5 단위를 그대로 적는다', function () {
+  assertEqual(formatScore(7.5), '7.5 / 10');
+  assertEqual(formatScore(0.5), '0.5 / 10');
 });
 
 test('shuffle: 원본을 바꾸지 않고 같은 원소를 돌려준다', function () {
