@@ -88,6 +88,72 @@ function validateQuestions(data) {
   return errors;
 }
 
+/* ===== 4. 상태 ===== */
+var state = {
+  screen: 'start',
+  mode: null,
+  category: null,
+  deck: [],
+  index: 0,
+  answers: [],
+  revealed: false,
+  hintUsed: false,
+  timeLeft: null,
+  timerId: null,
+  isRetry: false
+};
+
+function currentQuestion() {
+  return state.deck[state.index] || null;
+}
+
+function startRound(modeKey, categoryKey) {
+  state.screen = 'quiz';
+  state.mode = modeKey;
+  state.category = categoryKey;
+  state.deck = buildDeck(categoryKey);
+  state.index = 0;
+  state.answers = [];
+  state.revealed = false;
+  state.hintUsed = false;
+  state.isRetry = false;
+  render();
+}
+
+function answer(choice) {
+  if (state.revealed) return;
+  var rule = MODES[state.mode];
+  var result = {
+    correct: !!choice && !!choice.correct,
+    usedHint: state.hintUsed
+  };
+  state.answers.push({
+    id: currentQuestion().id,
+    picked: choice ? choice.text : null,
+    correct: result.correct,
+    usedHint: result.usedHint,
+    timedOut: false,
+    points: pointsFor(rule, result)
+  });
+  state.revealed = true;
+  render();
+}
+
+function next() {
+  state.revealed = false;
+  state.hintUsed = false;
+  state.index++;
+  if (state.index >= state.deck.length) {
+    state.screen = 'result';
+  }
+  render();
+}
+
+/* ===== 5. 렌더 ===== */
+function render() {
+  /* Task 10에서 채운다 */
+}
+
 /* ===== 6. 자체 점검 ===== */
 var TESTS = [];
 
@@ -263,6 +329,61 @@ test('buildDeck: 보기 문구가 겹쳐도 정답은 하나만 표시된다', f
   } finally {
     QUESTIONS.korean_history = original;
   }
+});
+
+test('startRound: 판을 초기화한다', function () {
+  startRound('practice', 'korean_history');
+  assertEqual(state.screen, 'quiz');
+  assertEqual(state.mode, 'practice');
+  assertEqual(state.category, 'korean_history');
+  assertEqual(state.index, 0);
+  assertEqual(state.answers.length, 0);
+  assertEqual(state.revealed, false);
+  assertEqual(state.deck.length, 10);
+});
+
+test('answer: 정답을 고르면 1점이 기록되고 해설 상태가 된다', function () {
+  startRound('practice', 'korean_history');
+  var correct = currentQuestion().choices.filter(function (c) { return c.correct; })[0];
+  answer(correct);
+  assertEqual(state.revealed, true);
+  assertEqual(state.answers.length, 1);
+  assertEqual(state.answers[0].correct, true);
+  assertEqual(state.answers[0].points, 1);
+});
+
+test('answer: 오답을 고르면 0점이 기록된다', function () {
+  startRound('practice', 'korean_history');
+  var wrong = currentQuestion().choices.filter(function (c) { return !c.correct; })[0];
+  answer(wrong);
+  assertEqual(state.answers[0].correct, false);
+  assertEqual(state.answers[0].points, 0);
+});
+
+test('answer: 해설 상태에서 다시 고르면 무시한다', function () {
+  startRound('practice', 'korean_history');
+  var choices = currentQuestion().choices;
+  answer(choices[0]);
+  answer(choices[1]);
+  assertEqual(state.answers.length, 1, '두 번 채점되었다');
+});
+
+test('next: 다음 문항으로 넘어가고 해설 상태가 풀린다', function () {
+  startRound('practice', 'korean_history');
+  answer(currentQuestion().choices[0]);
+  next();
+  assertEqual(state.index, 1);
+  assertEqual(state.revealed, false);
+});
+
+test('next: 10문항을 다 풀면 결과 화면으로 간다', function () {
+  startRound('practice', 'korean_history');
+  for (var i = 0; i < 10; i++) {
+    answer(currentQuestion().choices[0]);
+    next();
+  }
+  assertEqual(state.screen, 'result');
+  assertEqual(state.answers.length, 10);
 });
 
 test('questions.js 문항이 규칙을 지킨다', function () {
