@@ -51,3 +51,5 @@ button:disabled { opacity: .5; cursor: default; }
 .retry { border-color: #1565c0; color: #1565c0; }
 
 .choice.eliminated { opacity: .45; text-decoration: line-through; }
+
+.owner { color: #666; font-size: .9rem; margin: 0 0 4px; }

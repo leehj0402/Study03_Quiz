@@ -249,6 +249,11 @@ function render() {
 }
 
 function renderStart(app) {
+  var owner = document.createElement('p');
+  owner.className = 'owner';
+  owner.textContent = '2601970 이현지';
+  app.appendChild(owner);
+
   var h = document.createElement('h1');
   h.textContent = '상식 퀴즈';
   app.appendChild(h);
