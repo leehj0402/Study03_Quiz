@@ -1,0 +1,8 @@
+:root { font-family: system-ui, -apple-system, "Malgun Gothic", sans-serif; }
+body { margin: 0; padding: 16px; line-height: 1.6; }
+#app { max-width: 720px; margin: 0 auto; }
+
+.selftest { list-style: none; padding: 0; }
+.selftest li { padding: 4px 8px; border-radius: 4px; margin-bottom: 4px; }
+.selftest .ok { background: #e8f5e9; }
+.selftest .bad { background: #ffebee; }
