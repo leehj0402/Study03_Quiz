@@ -40,3 +40,5 @@ button:disabled { opacity: .5; cursor: default; }
 
 .timer { font-weight: 600; margin: 4px 0; }
 .timer.urgent { color: #c62828; }
+
+.hint { border-color: #ef6c00; color: #ef6c00; }

@@ -70,6 +70,12 @@ function formatScore(n) {
   return String(n) + ' / 10';
 }
 
+function removeTwoWrong(choices) {
+  var wrong = choices.filter(function (c) { return !c.correct; });
+  var drop = shuffle(wrong).slice(0, 2);
+  return choices.filter(function (c) { return drop.indexOf(c) === -1; });
+}
+
 function validateQuestions(data) {
   var errors = [];
   CATEGORIES.forEach(function (cat) {
@@ -110,6 +116,7 @@ var state = {
   answers: [],
   revealed: false,
   hintUsed: false,
+  removed: [],
   timeLeft: null,
   timerId: null,
   isRetry: false
@@ -128,6 +135,7 @@ function startRound(modeKey, categoryKey) {
   state.answers = [];
   state.revealed = false;
   state.hintUsed = false;
+  state.removed = [];
   state.isRetry = false;
   startTimer();
   render();
@@ -157,6 +165,7 @@ function next() {
   stopTimer();
   state.revealed = false;
   state.hintUsed = false;
+  state.removed = [];
   state.index++;
   if (state.index >= state.deck.length) {
     state.screen = 'result';
@@ -243,7 +252,8 @@ function renderQuiz(app) {
   list.className = 'choices';
   var picked = state.revealed ? state.answers[state.answers.length - 1].picked : null;
 
-  q.choices.forEach(function (c) {
+  var shown = state.revealed ? q.choices : visibleChoices();
+  shown.forEach(function (c) {
     var btn = document.createElement('button');
     btn.className = 'choice';
     btn.textContent = c.text;
@@ -257,6 +267,16 @@ function renderQuiz(app) {
     list.appendChild(btn);
   });
   app.appendChild(list);
+
+  var rule = MODES[state.mode];
+  if (rule.hint && !state.revealed) {
+    var hintBtn = document.createElement('button');
+    hintBtn.className = 'hint';
+    hintBtn.textContent = state.hintUsed ? '힌트 사용함' : '힌트 (오답 2개 지우기 · 0.5점)';
+    hintBtn.disabled = state.hintUsed;
+    hintBtn.onclick = function () { useHint(); };
+    app.appendChild(hintBtn);
+  }
 
   if (state.revealed) app.appendChild(buildExplanation(q));
 }
@@ -362,6 +382,23 @@ function goHome() {
   state.revealed = false;
   state.hintUsed = false;
   state.isRetry = false;
+  render();
+}
+
+function visibleChoices() {
+  var q = currentQuestion();
+  if (!q) return [];
+  if (!state.removed.length) return q.choices;
+  return q.choices.filter(function (c) { return state.removed.indexOf(c) === -1; });
+}
+
+function useHint() {
+  var rule = MODES[state.mode];
+  if (!rule.hint || state.hintUsed || state.revealed) return;
+  var q = currentQuestion();
+  var left = removeTwoWrong(q.choices);
+  state.removed = q.choices.filter(function (c) { return left.indexOf(c) === -1; });
+  state.hintUsed = true;
   render();
 }
 
@@ -739,6 +776,68 @@ test('타이머 누수: goHome·restartRound 가 interval 을 정리한다', fun
   assertTrue(state.timerId !== null, 'restartRound 뒤 새 타이머가 없다');
   stopTimer();
   assertTrue(state.timerId === null, 'stopTimer 뒤에도 타이머가 남았다');
+});
+
+test('removeTwoWrong: 2개만 남기고 정답이 포함된다', function () {
+  for (var n = 0; n < 50; n++) {
+    var choices = [
+      { text: '가', correct: false },
+      { text: '나', correct: true },
+      { text: '다', correct: false },
+      { text: '라', correct: false }
+    ];
+    var left = removeTwoWrong(choices);
+    assertEqual(left.length, 2, '남은 개수');
+    var correct = left.filter(function (c) { return c.correct; });
+    assertEqual(correct.length, 1, '정답이 지워졌다');
+  }
+});
+
+test('removeTwoWrong: 지워지는 2개는 항상 오답이다', function () {
+  for (var n = 0; n < 50; n++) {
+    var choices = [
+      { text: '가', correct: false },
+      { text: '나', correct: false },
+      { text: '다', correct: true },
+      { text: '라', correct: false }
+    ];
+    var left = removeTwoWrong(choices);
+    var wrongLeft = left.filter(function (c) { return !c.correct; });
+    assertEqual(wrongLeft.length, 1, '남은 오답 개수');
+  }
+});
+
+test('useHint: 힌트는 문항당 한 번만 쓰인다', function () {
+  startRound('hint', 'science');
+  useHint();
+  var first = visibleChoices().length;
+  useHint();
+  assertEqual(state.hintUsed, true);
+  assertEqual(visibleChoices().length, first, '힌트가 두 번 적용되었다');
+});
+
+test('useHint: 힌트를 쓰고 맞히면 0.5점', function () {
+  startRound('hint', 'science');
+  useHint();
+  var correct = visibleChoices().filter(function (c) { return c.correct; })[0];
+  answer(correct);
+  assertEqual(state.answers[0].points, 0.5);
+});
+
+test('useHint: 힌트를 안 쓰고 맞히면 1점', function () {
+  startRound('hint', 'science');
+  var correct = visibleChoices().filter(function (c) { return c.correct; })[0];
+  answer(correct);
+  assertEqual(state.answers[0].points, 1);
+});
+
+test('next: 다음 문항에서 힌트가 다시 쓸 수 있다', function () {
+  startRound('hint', 'science');
+  useHint();
+  answer(visibleChoices()[0]);
+  next();
+  assertEqual(state.hintUsed, false);
+  assertEqual(visibleChoices().length, 4);
 });
 
 test('questions.js 문항이 규칙을 지킨다', function () {
