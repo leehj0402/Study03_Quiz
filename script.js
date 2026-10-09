@@ -274,7 +274,64 @@ function buildExplanation(q) {
 }
 
 function renderResult(app) {
-  /* Task 12에서 채운다 */
+  var rule = MODES[state.mode];
+
+  var h = document.createElement('h1');
+  h.textContent = '결과';
+  app.appendChild(h);
+
+  var score = document.createElement('p');
+  score.className = 'score';
+  score.textContent = formatScore(totalScore(state.answers));
+  app.appendChild(score);
+
+  if (!rule.record) {
+    var note = document.createElement('p');
+    note.className = 'note';
+    note.textContent = '순위표에 기록되지 않음';
+    app.appendChild(note);
+  }
+
+  var list = document.createElement('ol');
+  list.className = 'summary';
+  state.answers.forEach(function (a) {
+    var q = null;
+    for (var i = 0; i < state.deck.length; i++) {
+      if (state.deck[i].id === a.id) q = state.deck[i];
+    }
+    var li = document.createElement('li');
+    li.className = a.correct ? 'ok' : 'bad';
+    var mark = document.createElement('span');
+    mark.className = 'mark';
+    mark.textContent = a.correct ? '정답' : '오답';
+    li.appendChild(mark);
+    var text = document.createElement('span');
+    text.textContent = ' ' + (q ? q.question : a.id);
+    li.appendChild(text);
+    list.appendChild(li);
+  });
+  app.appendChild(list);
+
+  var home = document.createElement('button');
+  home.textContent = '처음으로';
+  home.onclick = goHome;
+  app.appendChild(home);
+}
+
+function goHome() {
+  stopTimer();
+  state.screen = 'start';
+  state.deck = [];
+  state.index = 0;
+  state.answers = [];
+  state.revealed = false;
+  state.hintUsed = false;
+  state.isRetry = false;
+  render();
+}
+
+function stopTimer() {
+  /* Task 14에서 채운다 */
 }
 
 /* ===== 6. 자체 점검 ===== */

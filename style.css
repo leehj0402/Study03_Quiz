@@ -30,3 +30,10 @@ button:disabled { opacity: .5; cursor: default; }
 .explain.bad { background: #fff3e0; }
 .verdict { font-weight: 700; margin-top: 0; }
 .source { font-size: .85rem; color: #555; }
+
+.score { font-size: 2rem; font-weight: 700; margin: 8px 0; }
+.summary { padding-left: 1.5rem; }
+.summary li { margin-bottom: 6px; }
+.summary .mark { font-weight: 600; font-size: .85rem; padding: 1px 6px; border-radius: 4px; }
+.summary .ok .mark { background: #e8f5e9; color: #2e7d32; }
+.summary .bad .mark { background: #ffebee; color: #c62828; }
