@@ -16,6 +16,33 @@ var MODES = {
 };
 
 /* ===== 2. 순수 함수 ===== */
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i];
+    a[i] = a[j];
+    a[j] = t;
+  }
+  return a;
+}
+
+function buildDeck(categoryKey) {
+  var list = QUESTIONS[categoryKey] || [];
+  return shuffle(list).map(function (q) {
+    var choices = q.choices.map(function (text, i) {
+      return { text: text, correct: i === q.answerIndex };
+    });
+    return {
+      id: q.id,
+      question: q.question,
+      explanation: q.explanation,
+      source: q.source,
+      choices: shuffle(choices)
+    };
+  });
+}
+
 function pointsFor(rule, result) {
   if (!result.correct) return 0;
   return result.usedHint ? rule.scoreWithHint : rule.scoreOnCorrect;
@@ -177,6 +204,65 @@ test('formatScore: N / 10 형태로 적는다', function () {
   assertEqual(formatScore(7), '7 / 10');
   assertEqual(formatScore(10), '10 / 10');
   assertEqual(formatScore(0), '0 / 10');
+});
+
+test('shuffle: 원본을 바꾸지 않고 같은 원소를 돌려준다', function () {
+  var src = [1, 2, 3, 4, 5];
+  var out = shuffle(src);
+  assertEqual(src, [1, 2, 3, 4, 5], '원본이 바뀌었다');
+  assertEqual(out.slice().sort(), [1, 2, 3, 4, 5]);
+});
+
+test('buildDeck: 문항 10개를 빠짐·중복 없이 돌려준다', function () {
+  var deck = buildDeck('korean_history');
+  assertEqual(deck.length, 10);
+  var ids = deck.map(function (q) { return q.id; }).sort();
+  var want = QUESTIONS.korean_history.map(function (q) { return q.id; }).sort();
+  assertEqual(ids, want);
+});
+
+test('buildDeck: 보기 4개가 유지되고 정답이 정확히 1개다', function () {
+  CATEGORIES.forEach(function (cat) {
+    var deck = buildDeck(cat.key);
+    deck.forEach(function (q) {
+      assertEqual(q.choices.length, 4, q.id + ' 보기 개수');
+      var correct = q.choices.filter(function (c) { return c.correct; });
+      assertEqual(correct.length, 1, q.id + ' 정답 개수');
+    });
+  });
+});
+
+test('buildDeck: 정답 보기의 문구가 원본 answerIndex의 문구와 같다', function () {
+  var deck = buildDeck('korean_history');
+  deck.forEach(function (q) {
+    var src = null;
+    for (var i = 0; i < QUESTIONS.korean_history.length; i++) {
+      if (QUESTIONS.korean_history[i].id === q.id) src = QUESTIONS.korean_history[i];
+    }
+    var correct = q.choices.filter(function (c) { return c.correct; })[0];
+    assertEqual(correct.text, src.choices[src.answerIndex], q.id);
+  });
+});
+
+test('buildDeck: 보기 문구가 겹쳐도 정답은 하나만 표시된다', function () {
+  /* 문자열 매칭으로 정답을 찾으면 여기서 깨진다 */
+  var original = QUESTIONS.korean_history;
+  QUESTIONS.korean_history = [{
+    id: 'dup-01',
+    question: '중복 보기 문항',
+    choices: ['같음', '같음', '다름', '또다름'],
+    answerIndex: 1,
+    explanation: '해설',
+    source: { name: '기관', url: 'https://example.org/x', checkedOn: '2026-10-10' }
+  }];
+  try {
+    var deck = buildDeck('korean_history');
+    var correct = deck[0].choices.filter(function (c) { return c.correct; });
+    assertEqual(correct.length, 1, '정답이 1개여야 한다');
+    assertEqual(correct[0].text, '같음');
+  } finally {
+    QUESTIONS.korean_history = original;
+  }
 });
 
 test('questions.js 문항이 규칙을 지킨다', function () {
