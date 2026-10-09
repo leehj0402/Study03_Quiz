@@ -151,7 +151,62 @@ function next() {
 
 /* ===== 5. 렌더 ===== */
 function render() {
-  /* Task 10에서 채운다 */
+  var app = document.getElementById('app');
+  app.innerHTML = '';
+  if (state.screen === 'start')  return renderStart(app);
+  if (state.screen === 'quiz')   return renderQuiz(app);
+  if (state.screen === 'result') return renderResult(app);
+}
+
+function renderStart(app) {
+  var h = document.createElement('h1');
+  h.textContent = '상식 퀴즈';
+  app.appendChild(h);
+
+  var modeBox = document.createElement('section');
+  modeBox.className = 'modes';
+  var modeTitle = document.createElement('h2');
+  modeTitle.textContent = '모드';
+  modeBox.appendChild(modeTitle);
+
+  Object.keys(MODES).forEach(function (key) {
+    var rule = MODES[key];
+    var btn = document.createElement('button');
+    btn.className = 'mode' + (state.mode === key ? ' selected' : '');
+    btn.textContent = rule.label;
+    btn.onclick = function () { state.mode = key; render(); };
+    modeBox.appendChild(btn);
+  });
+
+  var note = document.createElement('p');
+  note.className = 'note';
+  note.textContent = MODES[state.mode].label + ' 모드 · ' +
+    (MODES[state.mode].record ? '순위표에 기록됨' : '순위표에 기록되지 않음');
+  modeBox.appendChild(note);
+  app.appendChild(modeBox);
+
+  var catBox = document.createElement('section');
+  catBox.className = 'categories';
+  var catTitle = document.createElement('h2');
+  catTitle.textContent = '카테고리를 고르면 시작합니다';
+  catBox.appendChild(catTitle);
+
+  CATEGORIES.forEach(function (cat) {
+    var btn = document.createElement('button');
+    btn.className = 'category';
+    btn.textContent = cat.label;
+    btn.onclick = function () { startRound(state.mode, cat.key); };
+    catBox.appendChild(btn);
+  });
+  app.appendChild(catBox);
+}
+
+function renderQuiz(app) {
+  /* Task 11에서 채운다 */
+}
+
+function renderResult(app) {
+  /* Task 12에서 채운다 */
 }
 
 /* ===== 6. 자체 점검 ===== */
@@ -411,5 +466,11 @@ function oneQuestionData(q) {
 if (wantsTest()) {
   runSelfTest();
 } else {
-  document.getElementById('app').textContent = '준비 중';
+  var errors = validateQuestions(QUESTIONS);
+  if (errors.length) {
+    console.warn('문항 검증 경고 ' + errors.length + '건');
+    errors.forEach(function (e) { console.warn(e); });
+  }
+  state.mode = 'practice';
+  render();
 }
