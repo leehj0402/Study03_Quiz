@@ -37,3 +37,6 @@ button:disabled { opacity: .5; cursor: default; }
 .summary .mark { font-weight: 600; font-size: .85rem; padding: 1px 6px; border-radius: 4px; }
 .summary .ok .mark { background: #e8f5e9; color: #2e7d32; }
 .summary .bad .mark { background: #ffebee; color: #c62828; }
+
+.timer { font-weight: 600; margin: 4px 0; }
+.timer.urgent { color: #c62828; }

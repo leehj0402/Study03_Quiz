@@ -129,6 +129,7 @@ function startRound(modeKey, categoryKey) {
   state.revealed = false;
   state.hintUsed = false;
   state.isRetry = false;
+  startTimer();
   render();
 }
 
@@ -147,16 +148,20 @@ function answer(choice) {
     timedOut: false,
     points: pointsFor(rule, result)
   });
+  stopTimer();
   state.revealed = true;
   render();
 }
 
 function next() {
+  stopTimer();
   state.revealed = false;
   state.hintUsed = false;
   state.index++;
   if (state.index >= state.deck.length) {
     state.screen = 'result';
+  } else {
+    startTimer();
   }
   render();
 }
@@ -221,6 +226,13 @@ function renderQuiz(app) {
   prog.className = 'progress';
   prog.textContent = (state.index + 1) + ' / ' + state.deck.length;
   app.appendChild(prog);
+
+  if (state.timeLeft !== null) {
+    var timer = document.createElement('p');
+    timer.className = 'timer' + (state.timeLeft <= 5 ? ' urgent' : '');
+    timer.textContent = '남은 시간 ' + state.timeLeft + '초';
+    app.appendChild(timer);
+  }
 
   var qt = document.createElement('h1');
   qt.className = 'question';
@@ -353,8 +365,47 @@ function goHome() {
   render();
 }
 
+function startTimer() {
+  stopTimer();
+  var rule = MODES[state.mode];
+  if (!rule.timeLimit) {
+    state.timeLeft = null;
+    return;
+  }
+  state.timeLeft = rule.timeLimit;
+  state.timerId = setInterval(function () {
+    state.timeLeft--;
+    if (state.timeLeft <= 0) {
+      onTimeout();
+    } else {
+      render();
+    }
+  }, 1000);
+}
+
 function stopTimer() {
-  /* Task 14에서 채운다 */
+  if (state.timerId !== null) {
+    clearInterval(state.timerId);
+    state.timerId = null;
+  }
+}
+
+function onTimeout() {
+  stopTimer();
+  if (state.revealed) return;
+  var rule = MODES[state.mode];
+  var result = { correct: false, usedHint: state.hintUsed };
+  state.answers.push({
+    id: currentQuestion().id,
+    picked: null,
+    correct: false,
+    usedHint: state.hintUsed,
+    timedOut: true,
+    points: pointsFor(rule, result)
+  });
+  state.timeLeft = 0;
+  state.revealed = true;
+  render();
 }
 
 /* ===== 6. 자체 점검 ===== */
@@ -636,6 +687,58 @@ test('restartRound: 같은 모드·카테고리로 새 판을 시작한다', fun
   assertEqual(state.answers.length, 0);
   assertEqual(state.revealed, false);
   assertEqual(state.deck.length, 10);
+});
+
+test('onTimeout: 오답 0점으로 기록하고 해설 상태가 된다', function () {
+  startRound('speed', 'science');
+  onTimeout();
+  assertEqual(state.answers.length, 1);
+  assertEqual(state.answers[0].correct, false);
+  assertEqual(state.answers[0].timedOut, true);
+  assertEqual(state.answers[0].points, 0);
+  assertEqual(state.revealed, true);
+  stopTimer();
+});
+
+test('onTimeout: 이미 해설 상태면 두 번 채점하지 않는다', function () {
+  startRound('speed', 'science');
+  answer(currentQuestion().choices[0]);
+  onTimeout();
+  assertEqual(state.answers.length, 1, '타임아웃이 한 번 더 채점했다');
+  stopTimer();
+});
+
+test('answer: 타임아웃 직후의 클릭은 무시된다', function () {
+  startRound('speed', 'science');
+  onTimeout();
+  var correct = currentQuestion().choices.filter(function (c) { return c.correct; })[0];
+  answer(correct);
+  assertEqual(state.answers.length, 1, '클릭이 한 번 더 채점했다');
+  assertEqual(state.answers[0].points, 0, '타임아웃 점수가 덮였다');
+  stopTimer();
+});
+
+test('startRound: 제한시간이 없는 모드는 timeLeft가 null', function () {
+  startRound('practice', 'science');
+  assertEqual(state.timeLeft, null);
+});
+
+test('startRound: 스피드 모드는 timeLeft가 15', function () {
+  startRound('speed', 'science');
+  assertEqual(state.timeLeft, 15);
+  stopTimer();
+});
+
+test('타이머 누수: goHome·restartRound 가 interval 을 정리한다', function () {
+  startRound('speed', 'science');
+  assertTrue(state.timerId !== null, 'startRound 가 타이머를 걸지 않았다');
+  goHome();
+  assertTrue(state.timerId === null, 'goHome 이 타이머를 남겼다');
+  startRound('speed', 'science');
+  restartRound();
+  assertTrue(state.timerId !== null, 'restartRound 뒤 새 타이머가 없다');
+  stopTimer();
+  assertTrue(state.timerId === null, 'stopTimer 뒤에도 타이머가 남았다');
 });
 
 test('questions.js 문항이 규칙을 지킨다', function () {
