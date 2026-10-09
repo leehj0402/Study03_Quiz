@@ -70,6 +70,21 @@ function formatScore(n) {
   return String(n) + ' / 10';
 }
 
+function categoryLabel(key) {
+  for (var i = 0; i < CATEGORIES.length; i++) {
+    if (CATEGORIES[i].key === key) return CATEGORIES[i].label;
+  }
+  return '';
+}
+
+function modeSummary(rule) {
+  var parts = [];
+  parts.push(rule.timeLimit ? '문항당 ' + rule.timeLimit + '초' : '제한시간 없음');
+  if (rule.hint) parts.push('오답 2개 지우기(' + rule.scoreWithHint + '점)');
+  parts.push(rule.record ? '순위표에 기록됨' : '순위표에 기록되지 않음');
+  return parts.join(' · ');
+}
+
 function removeTwoWrong(choices) {
   var wrong = choices.filter(function (c) { return !c.correct; });
   var drop = shuffle(wrong).slice(0, 2);
@@ -130,6 +145,20 @@ var state = {
 
 function currentQuestion() {
   return state.deck[state.index] || null;
+}
+
+function chooseCategory(categoryKey) {
+  state.category = categoryKey;
+  state.screen = 'mode';
+  render();
+}
+
+function backToCategories() {
+  stopTimer();
+  state.category = null;
+  state.mode = null;
+  state.screen = 'start';
+  render();
 }
 
 function startRound(modeKey, categoryKey) {
@@ -213,6 +242,7 @@ function render() {
   var app = document.getElementById('app');
   app.innerHTML = '';
   if (state.screen === 'start')  return renderStart(app);
+  if (state.screen === 'mode')   return renderMode(app);
   if (state.screen === 'quiz')   return renderQuiz(app);
   if (state.screen === 'result') return renderResult(app);
 }
@@ -222,42 +252,58 @@ function renderStart(app) {
   h.textContent = '상식 퀴즈';
   app.appendChild(h);
 
-  var modeBox = document.createElement('section');
-  modeBox.className = 'modes';
-  var modeTitle = document.createElement('h2');
-  modeTitle.textContent = '모드';
-  modeBox.appendChild(modeTitle);
-
-  Object.keys(MODES).forEach(function (key) {
-    var rule = MODES[key];
-    var btn = document.createElement('button');
-    btn.className = 'mode' + (state.mode === key ? ' selected' : '');
-    btn.textContent = rule.label;
-    btn.onclick = function () { state.mode = key; render(); };
-    modeBox.appendChild(btn);
-  });
-
-  var note = document.createElement('p');
-  note.className = 'note';
-  note.textContent = MODES[state.mode].label + ' 모드 · ' +
-    (MODES[state.mode].record ? '순위표에 기록됨' : '순위표에 기록되지 않음');
-  modeBox.appendChild(note);
-  app.appendChild(modeBox);
-
   var catBox = document.createElement('section');
   catBox.className = 'categories';
   var catTitle = document.createElement('h2');
-  catTitle.textContent = '카테고리를 고르면 시작합니다';
+  catTitle.textContent = '카테고리를 고르세요';
   catBox.appendChild(catTitle);
 
   CATEGORIES.forEach(function (cat) {
     var btn = document.createElement('button');
     btn.className = 'category';
     btn.textContent = cat.label;
-    btn.onclick = function () { startRound(state.mode, cat.key); };
+    btn.onclick = function () { chooseCategory(cat.key); };
     catBox.appendChild(btn);
   });
   app.appendChild(catBox);
+}
+
+function renderMode(app) {
+  var h = document.createElement('h1');
+  h.textContent = categoryLabel(state.category);
+  app.appendChild(h);
+
+  var modeBox = document.createElement('section');
+  modeBox.className = 'modes';
+  var modeTitle = document.createElement('h2');
+  modeTitle.textContent = '모드를 고르세요';
+  modeBox.appendChild(modeTitle);
+
+  Object.keys(MODES).forEach(function (key) {
+    var rule = MODES[key];
+    var item = document.createElement('div');
+    item.className = 'mode-item';
+
+    var btn = document.createElement('button');
+    btn.className = 'mode';
+    btn.textContent = rule.label;
+    btn.onclick = function () { startRound(key, state.category); };
+    item.appendChild(btn);
+
+    var desc = document.createElement('p');
+    desc.className = 'mode-desc';
+    desc.textContent = modeSummary(rule);
+    item.appendChild(desc);
+
+    modeBox.appendChild(item);
+  });
+  app.appendChild(modeBox);
+
+  var back = document.createElement('button');
+  back.className = 'back';
+  back.textContent = '카테고리 다시 고르기';
+  back.onclick = backToCategories;
+  app.appendChild(back);
 }
 
 function renderQuiz(app) {
@@ -427,6 +473,8 @@ function restartRound() {
 function goHome() {
   stopTimer();
   state.screen = 'start';
+  state.mode = null;
+  state.category = null;
   state.deck = [];
   state.index = 0;
   state.answers = [];
@@ -943,6 +991,36 @@ test('startRetry: 재도전은 원래 점수를 바꾸지 않는다', function (
   assertEqual(totalScore(state.answers), 10, '재도전 판 집계');
 });
 
+test('modeSummary: 규칙에서 모드 설명을 만든다', function () {
+  assertEqual(modeSummary(MODES.practice), '제한시간 없음 · 순위표에 기록되지 않음');
+  assertEqual(modeSummary(MODES.speed), '문항당 15초 · 순위표에 기록됨');
+  assertEqual(modeSummary(MODES.hint), '제한시간 없음 · 오답 2개 지우기(0.5점) · 순위표에 기록됨');
+});
+
+test('chooseCategory: 카테고리를 정하고 모드 화면으로 간다', function () {
+  state.screen = 'start';
+  state.category = null;
+  chooseCategory('science');
+  assertEqual(state.category, 'science');
+  assertEqual(state.screen, 'mode');
+});
+
+test('backToCategories: 카테고리 화면으로 돌아가고 고른 것을 지운다', function () {
+  chooseCategory('science');
+  backToCategories();
+  assertEqual(state.screen, 'start');
+  assertEqual(state.category, null);
+  assertEqual(state.mode, null);
+});
+
+test('goHome: 판 도중에도 카테고리 화면으로 돌아간다', function () {
+  startRound('practice', 'science');
+  goHome();
+  assertEqual(state.screen, 'start');
+  assertEqual(state.category, null);
+  assertEqual(state.mode, null);
+});
+
 test('questions.js 문항이 규칙을 지킨다', function () {
   assertEqual(validateQuestions(QUESTIONS), []);
 });
@@ -973,6 +1051,5 @@ if (wantsTest()) {
     console.warn('문항 검증 경고 ' + errors.length + '건');
     errors.forEach(function (e) { console.warn(e); });
   }
-  state.mode = 'practice';
   render();
 }
