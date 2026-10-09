@@ -50,10 +50,10 @@ var QUESTIONS = {
     },
     {
       id: 'kh-05',
-      question: '1919년 4월 11일 대한민국임시정부가 수립된 도시는?',
+      question: '1919년 4월 대한민국임시정부가 수립된 도시는?',
       choices: ['중국 상하이', '중국 충칭', '러시아 블라디보스토크', '미국 하와이'],
       answerIndex: 0,
-      explanation: '대한민국임시정부는 1919년 4월 11일 중국 상하이에서 수립됐다. 충칭은 뒷날 임시정부가 옮겨 간 곳이다.',
+      explanation: '대한민국임시정부는 1919년 4월 중국 상하이에서 수립됐다. 충칭은 뒷날 임시정부가 옮겨 간 곳이다.',
       source: {
         name: '한국학중앙연구원 한국민족문화대백과사전, 「대한민국 임시정부 수립 기념일」',
         url: 'https://encykorea.aks.ac.kr/Article/E0080590',
@@ -63,7 +63,7 @@ var QUESTIONS = {
     {
       id: 'kh-06',
       question: '조선 세종 때 만들어진 측우기는 무엇을 재는 기구인가?',
-      choices: ['비가 내린 양', '바람의 방향', '그림자로 재는 시각', '땅의 높낮이'],
+      choices: ['비가 내린 양', '바람의 방향', '해 그림자의 길이', '땅의 높낮이'],
       answerIndex: 0,
       explanation: '측우기는 금속제 원통형 그릇에 빗물을 받아 표준화된 자로 깊이를 재는 기구로, 현대의 우량계에 해당한다.',
       source: {
@@ -101,7 +101,7 @@ var QUESTIONS = {
       question: '중국 지린성 집안시에 있는 광개토왕릉비를 414년에 세운 고구려 왕은?',
       choices: ['장수왕', '광개토왕', '소수림왕', '고국원왕'],
       answerIndex: 0,
-      explanation: '광개토왕릉비는 414년(장수왕 3)에 장수왕이 아버지 광개토왕의 업적을 기리기 위해 세웠다.',
+      explanation: '광개토왕릉비는 414년에 장수왕이 아버지 광개토왕의 업적을 기리기 위해 세웠다.',
       source: {
         name: '한국학중앙연구원 한국민족문화대백과사전, 「광개토왕릉비」',
         url: 'https://encykorea.aks.ac.kr/Article/E0005058',
@@ -136,10 +136,10 @@ var QUESTIONS = {
     },
     {
       id: 'wg-02',
-      question: '시베리아 남동부에 있고 깊이가 약 1,700m로 지구 담수의 약 20%를 담고 있는 호수는?',
+      question: '시베리아 남동부에 있고, 2026년 기준 세계에서 가장 깊은 호수는?',
       choices: ['바이칼호', '카스피해', '빅토리아호', '탕가니카호'],
       answerIndex: 0,
-      explanation: '바이칼호는 약 2,500만 년 전에 생긴 호수로, 깊이 약 1,700m에 지구 전체 미결빙 담수의 20%를 담고 있다.',
+      explanation: '바이칼호는 약 2,500만 년 전에 생긴 세계에서 가장 깊은 호수로, 지구의 지표 담수 가운데 가장 많은 양을 담고 있다.',
       source: {
         name: 'UNESCO World Heritage Centre, "Lake Baikal"',
         url: 'https://whc.unesco.org/en/list/754/',
@@ -148,10 +148,10 @@ var QUESTIONS = {
     },
     {
       id: 'wg-03',
-      question: '네팔의 사가르마타 국립공원이 품고 있는, 2026년 기준 해발 8,848m의 세계 최고봉은?',
+      question: '네팔의 사가르마타 국립공원이 품고 있는, 2026년 기준 세계 최고봉은?',
       choices: ['에베레스트', 'K2', '칸첸중가', '안나푸르나'],
       answerIndex: 0,
-      explanation: '사가르마타 국립공원은 해발 8,848m의 에베레스트가 중심인 지역으로, 눈표범과 레서판다 같은 희귀종이 산다.',
+      explanation: '사가르마타 국립공원은 세계 최고봉 에베레스트가 중심인 지역으로, 눈표범과 레서판다 같은 희귀종이 산다.',
       source: {
         name: 'UNESCO World Heritage Centre, "Sagarmatha National Park"',
         url: 'https://whc.unesco.org/en/list/120/',
@@ -184,10 +184,10 @@ var QUESTIONS = {
     },
     {
       id: 'wg-06',
-      question: '약 17,500개의 섬으로 이루어진 동남아시아 국가는?',
+      question: '1만 개가 넘는 섬으로 이루어진 동남아시아 국가는?',
       choices: ['인도네시아', '필리핀', '말레이시아', '파푸아뉴기니'],
       answerIndex: 0,
-      explanation: '인도네시아는 약 17,500개의 섬으로 이루어져 있고, 그 가운데 7,000개가 넘는 섬에는 사람이 살지 않는다.',
+      explanation: '인도네시아는 1만 개가 넘는 섬으로 이루어진 세계 최대의 섬나라다. 섬을 세는 기준이 달라 자료마다 전체 섬 수가 다르다.',
       source: {
         name: 'Encyclopaedia Britannica, "Indonesia"',
         url: 'https://www.britannica.com/place/Indonesia',
@@ -208,7 +208,7 @@ var QUESTIONS = {
     },
     {
       id: 'wg-08',
-      question: '요르단강이 흘러드는 곳이자, 지구 지표면에서 수면이 가장 낮은 호수는?',
+      question: '요르단강이 흘러드는 곳이자, 2026년 기준 지구 지표면에서 수면이 가장 낮은 호수는?',
       choices: ['사해', '카스피해', '아랄해', '투르카나호'],
       answerIndex: 0,
       explanation: '사해는 지구 지표면에서 수면 높이가 가장 낮은 호수이며, 물은 거의 전부 북쪽에서 흘러드는 요르단강에서 온다.',
@@ -220,7 +220,7 @@ var QUESTIONS = {
     },
     {
       id: 'wg-09',
-      question: '세계에서 가장 큰 산호초 군락인 그레이트배리어리프가 있는 나라는?',
+      question: '2026년 기준 세계에서 가장 큰 산호초 군락인 그레이트배리어리프가 있는 나라는?',
       choices: ['오스트레일리아', '인도네시아', '멕시코', '이집트'],
       answerIndex: 0,
       explanation: '그레이트배리어리프는 오스트레일리아 북동 해안에 있으며, 산호 400종과 어류 1,500종이 사는 세계 최대 산호초 군락이다.',
@@ -235,7 +235,7 @@ var QUESTIONS = {
       question: '적도 남쪽에서 시작해 아프리카 북동부를 북쪽으로 흐르는 나일강이 흘러드는 바다는?',
       choices: ['지중해', '홍해', '아라비아해', '흑해'],
       answerIndex: 0,
-      explanation: '나일강은 적도 남쪽에서 시작해 북쪽으로 약 6,650km를 흘러 지중해로 들어간다.',
+      explanation: '나일강은 적도 남쪽에서 시작해 아프리카 북동부를 북쪽으로 흘러 지중해로 들어간다.',
       source: {
         name: 'Encyclopaedia Britannica, "Nile River"',
         url: 'https://www.britannica.com/place/Nile-River',
@@ -271,7 +271,7 @@ var QUESTIONS = {
     {
       id: 'sc-03',
       question: '화성이 가진 위성의 수와 이름은?',
-      choices: ['2개 — 포보스와 데이모스', '1개 — 포보스', '3개 — 포보스·데이모스·트리톤', '위성이 없다'],
+      choices: ['2개 — 포보스와 데이모스', '1개 — 포보스', '3개 — 포보스·데이모스·트리톤', '1개 — 데이모스'],
       answerIndex: 0,
       explanation: '화성에는 포보스와 데이모스 두 위성이 있고, 둘 다 붙잡힌 소행성이나 태양계 형성 초기의 잔해로 본다.',
       source: {
@@ -348,7 +348,7 @@ var QUESTIONS = {
     {
       id: 'sc-09',
       question: '1912년에 대륙이동설을 처음으로 상세하게 내놓은 독일의 기상학자는?',
-      choices: ['알프레트 베게너', '찰스 다윈', '제임스 허턴', '알프레드 윌리스'],
+      choices: ['알프레트 베게너', '찰스 다윈', '제임스 허턴', '찰스 라이엘'],
       answerIndex: 0,
       explanation: '대륙이동설을 처음으로 상세하고 포괄적으로 제안한 사람은 1912년 독일 기상학자 알프레트 베게너다.',
       source: {
@@ -359,10 +359,10 @@ var QUESTIONS = {
     },
     {
       id: 'sc-10',
-      question: '지금 지구 대기에서 가장 큰 비중을 차지하는 기체는?',
+      question: '2026년 기준 지구 대기에서 건조 공기의 부피 비중이 가장 큰 기체는?',
       choices: ['질소', '산소', '이산화탄소', '아르곤'],
       answerIndex: 0,
-      explanation: '지구 대기의 분자 조성은 질소(N2)가 약 78%로 가장 많고, 그다음이 산소다.',
+      explanation: '건조 공기의 부피를 기준으로 지구 대기는 질소(N2)가 약 78%로 가장 많고, 그다음이 산소다.',
       source: {
         name: 'Encyclopaedia Britannica, "Atmosphere"',
         url: 'https://www.britannica.com/science/atmosphere',
@@ -421,10 +421,10 @@ var QUESTIONS = {
     },
     {
       id: 'ac-05',
-      question: '1876년에 발레 「백조의 호수」를 작곡한 러시아 작곡가는?',
+      question: '1877년 모스크바 볼쇼이 극장에서 초연된 발레 「백조의 호수」를 작곡한 러시아 작곡가는?',
       choices: ['차이콥스키', '스트라빈스키', '프로코피예프', '림스키코르사코프'],
       answerIndex: 0,
-      explanation: '「백조의 호수」는 1876년 러시아 작곡가 표트르 일리치 차이콥스키가 작곡한 발레다.',
+      explanation: '「백조의 호수」는 러시아 작곡가 표트르 일리치 차이콥스키가 작곡해 1877년 모스크바 볼쇼이 극장에서 초연된 발레다.',
       source: {
         name: 'Encyclopaedia Britannica, "Swan Lake"',
         url: 'https://www.britannica.com/topic/Swan-Lake-ballet-by-Tchaikovsky',
@@ -437,8 +437,8 @@ var QUESTIONS = {
       choices: [
         '소리꾼 한 명과 고수 한 명',
         '소리꾼 한 명과 관현악단',
-        '소리꾼 네 명이 돌아가며 부른다',
-        '탈을 쓴 배우 여러 명'
+        '소리꾼 네 명과 고수 한 명',
+        '탈을 쓴 배우 여러 명과 악사 한 명'
       ],
       answerIndex: 0,
       explanation: '유네스코는 판소리를 소리꾼(vocalist) 한 명과 고수(drummer) 한 명이 이야기를 노래로 엮어 가는 음악 양식으로 설명한다.',
@@ -451,7 +451,7 @@ var QUESTIONS = {
     {
       id: 'ac-07',
       question: '8세기에 토함산 자락에 만들어졌고 본존불이 바다를 바라보는, 불국사와 함께 유네스코 세계유산에 오른 석굴은?',
-      choices: ['석굴암', '골굴암', '마애여래삼존상', '운주사 석굴'],
+      choices: ['석굴암', '골굴암', '군위 삼존석굴', '신선사 석굴'],
       answerIndex: 0,
       explanation: '석굴암은 8세기에 토함산 자락에 세워진 석굴로, 항마촉지인을 한 본존불이 바다를 바라본다. 불국사와 함께 세계유산에 등재됐다.',
       source: {
