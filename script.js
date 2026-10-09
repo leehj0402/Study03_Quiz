@@ -312,10 +312,21 @@ function renderResult(app) {
   });
   app.appendChild(list);
 
+  var again = document.createElement('button');
+  again.className = 'again';
+  again.textContent = '같은 카테고리 다시 풀기';
+  again.onclick = restartRound;
+  app.appendChild(again);
+
   var home = document.createElement('button');
   home.textContent = '처음으로';
   home.onclick = goHome;
   app.appendChild(home);
+}
+
+function restartRound() {
+  stopTimer();
+  startRound(state.mode, state.category);
 }
 
 function goHome() {
@@ -564,6 +575,20 @@ test('next: 10문항을 다 풀면 결과 화면으로 간다', function () {
   }
   assertEqual(state.screen, 'result');
   assertEqual(state.answers.length, 10);
+});
+
+test('restartRound: 같은 모드·카테고리로 새 판을 시작한다', function () {
+  startRound('practice', 'science');
+  answer(currentQuestion().choices[0]);
+  next();
+  restartRound();
+  assertEqual(state.screen, 'quiz');
+  assertEqual(state.mode, 'practice');
+  assertEqual(state.category, 'science');
+  assertEqual(state.index, 0);
+  assertEqual(state.answers.length, 0);
+  assertEqual(state.revealed, false);
+  assertEqual(state.deck.length, 10);
 });
 
 test('questions.js 문항이 규칙을 지킨다', function () {

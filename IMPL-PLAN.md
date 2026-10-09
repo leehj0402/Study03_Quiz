@@ -78,7 +78,7 @@ PRD가 함의하지만 어느 과제의 테스트도 저절로 짚지 않는 입
 - 시작 화면: 모드 영역(연습만, "순위표에 기록되지 않음") + 카테고리 4개
 - 문항 화면: 응답 전 상태 / 해설 상태, 출처 링크
 - 문항·보기 섞기
-- 결과 화면: `N / 10`, 문항별 정오 요약
+- 결과 화면: `N / 10`, 문항별 정오 요약, [같은 카테고리 다시 풀기], [처음으로]
 - `MODES`(`practice`만)와 `pointsFor()`
 
 **일부러 넣지 않는다:** 스피드·힌트 모드, 타이머, 힌트, 틀린 문제 다시 풀기, 이름 입력칸, 순위표.
@@ -1247,7 +1247,7 @@ git commit -m "feat: 문항 화면과 해설 표시"
 
 **Interfaces:**
 - Consumes: `state`, `totalScore`, `formatScore`, `MODES`, `render`
-- Produces: `renderResult(app)`, `goHome()`
+- Produces: `renderResult(app)`, `goHome()`, `restartRound()`
 
 - [ ] **Step 1: 결과 화면을 그린다**
 
@@ -1318,6 +1318,45 @@ function stopTimer() {
 }
 ```
 
+- [ ] **Step 1b: [같은 카테고리 다시 풀기]를 붙인다**
+
+결과 화면에서 같은 모드·카테고리로 새 판을 바로 시작한다 (PRD 4.1). 먼저 실패하는 점검을 쓴다.
+
+```js
+test('restartRound: 같은 모드·카테고리로 새 판을 시작한다', function () {
+  startRound('practice', 'science');
+  answer(currentQuestion().choices[0]);
+  next();
+  restartRound();
+  assertEqual(state.screen, 'quiz');
+  assertEqual(state.mode, 'practice');
+  assertEqual(state.category, 'science');
+  assertEqual(state.index, 0);
+  assertEqual(state.answers.length, 0);
+  assertEqual(state.revealed, false);
+  assertEqual(state.deck.length, 10);
+});
+```
+
+구현은 타이머 정리 경로를 거친 뒤 같은 인자로 다시 시작한다.
+
+```js
+function restartRound() {
+  stopTimer();
+  startRound(state.mode, state.category);
+}
+```
+
+`renderResult` 의 [처음으로] **앞에** 버튼을 둔다.
+
+```js
+  var again = document.createElement('button');
+  again.className = 'again';
+  again.textContent = '같은 카테고리 다시 풀기';
+  again.onclick = restartRound;
+  app.appendChild(again);
+```
+
 - [ ] **Step 2: 스타일을 넣는다**
 
 ```css
@@ -1364,6 +1403,7 @@ git commit -m "feat: 결과 화면과 점수 표시"
 - [ ] 해설 상태에서 보기를 다시 눌러도 답이 바뀌지 않는다
 - [ ] 같은 카테고리를 두 번 풀면 문항 순서와 보기 위치가 달라진다
 - [ ] 결과 화면 점수가 실제 정답 수와 일치한다
+- [ ] [같은 카테고리 다시 풀기]를 누르면 같은 카테고리로 새 판이 1/10부터 시작된다
 - [ ] 휴대폰 너비(약 375px)에서 보기 버튼이 잘리지 않는다
 - [ ] 콘솔에 오류와 문항 검증 경고가 없다
 
