@@ -80,7 +80,7 @@ function categoryLabel(key) {
 function modeSummary(rule) {
   var parts = [];
   parts.push(rule.timeLimit ? '문항당 ' + rule.timeLimit + '초' : '제한시간 없음');
-  if (rule.hint) parts.push('오답 2개 지우기(' + rule.scoreWithHint + '점)');
+  if (rule.hint) parts.push('오답 2개 걸러내기(' + rule.scoreWithHint + '점)');
   parts.push(rule.record ? '순위표에 기록됨' : '순위표에 기록되지 않음');
   return parts.join(' · ');
 }
@@ -179,6 +179,7 @@ function startRound(modeKey, categoryKey) {
 
 function answer(choice) {
   if (state.revealed) return;
+  if (state.removed.indexOf(choice) !== -1) return;
   var rule = MODES[state.mode];
   var result = {
     correct: !!choice && !!choice.correct,
@@ -331,8 +332,7 @@ function renderQuiz(app) {
   list.className = 'choices';
   var picked = state.revealed ? state.answers[state.answers.length - 1].picked : null;
 
-  var shown = state.revealed ? q.choices : visibleChoices();
-  shown.forEach(function (c) {
+  q.choices.forEach(function (c) {
     var btn = document.createElement('button');
     btn.className = 'choice';
     btn.textContent = c.text;
@@ -340,6 +340,9 @@ function renderQuiz(app) {
       btn.disabled = true;
       if (c.correct) btn.className += ' correct';
       else if (c.text === picked) btn.className += ' wrong';
+    } else if (state.removed.indexOf(c) !== -1) {
+      btn.className += ' eliminated';
+      btn.disabled = true;
     } else {
       btn.onclick = function () { answer(c); };
     }
@@ -351,7 +354,7 @@ function renderQuiz(app) {
   if (rule.hint && !state.revealed) {
     var hintBtn = document.createElement('button');
     hintBtn.className = 'hint';
-    hintBtn.textContent = state.hintUsed ? '힌트 사용함' : '힌트 (오답 2개 지우기 · 0.5점)';
+    hintBtn.textContent = state.hintUsed ? '힌트 사용함' : '힌트 (오답 2개 걸러내기 · 0.5점)';
     hintBtn.disabled = state.hintUsed;
     hintBtn.onclick = function () { useHint(); };
     app.appendChild(hintBtn);
@@ -994,7 +997,7 @@ test('startRetry: 재도전은 원래 점수를 바꾸지 않는다', function (
 test('modeSummary: 규칙에서 모드 설명을 만든다', function () {
   assertEqual(modeSummary(MODES.practice), '제한시간 없음 · 순위표에 기록되지 않음');
   assertEqual(modeSummary(MODES.speed), '문항당 15초 · 순위표에 기록됨');
-  assertEqual(modeSummary(MODES.hint), '제한시간 없음 · 오답 2개 지우기(0.5점) · 순위표에 기록됨');
+  assertEqual(modeSummary(MODES.hint), '제한시간 없음 · 오답 2개 걸러내기(0.5점) · 순위표에 기록됨');
 });
 
 test('chooseCategory: 카테고리를 정하고 모드 화면으로 간다', function () {
@@ -1019,6 +1022,22 @@ test('goHome: 판 도중에도 카테고리 화면으로 돌아간다', function
   assertEqual(state.screen, 'start');
   assertEqual(state.category, null);
   assertEqual(state.mode, null);
+});
+
+test('힌트: 걸러낸 뒤에도 보기 4개가 그대로 남는다', function () {
+  startRound('hint', 'science');
+  useHint();
+  assertEqual(currentQuestion().choices.length, 4, '보기가 목록에서 빠졌다');
+  assertEqual(state.removed.length, 2, '걸러낸 보기 수');
+  assertEqual(visibleChoices().length, 2, '고를 수 있는 보기 수');
+});
+
+test('answer: 걸러낸 보기를 눌러도 채점되지 않는다', function () {
+  startRound('hint', 'science');
+  useHint();
+  answer(state.removed[0]);
+  assertEqual(state.answers.length, 0, '걸러낸 보기가 채점되었다');
+  assertEqual(state.revealed, false, '걸러낸 보기로 해설이 열렸다');
 });
 
 test('questions.js 문항이 규칙을 지킨다', function () {
