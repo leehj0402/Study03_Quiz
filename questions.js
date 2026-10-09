@@ -121,7 +121,128 @@ var QUESTIONS = {
       }
     }
   ],
-  world_geography: [],
+  world_geography: [
+    {
+      id: 'wg-01',
+      question: '2026년 기준 국토 면적이 세계에서 가장 넓은 나라는? (면적 2위 나라의 거의 두 배다)',
+      choices: ['러시아', '캐나다', '중국', '미국'],
+      answerIndex: 0,
+      explanation: '러시아는 면적 2위인 캐나다의 거의 두 배 넓이로, 북아시아 전체와 유럽 동부 3분의 1에 걸쳐 11개 시간대를 지난다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Russia"',
+        url: 'https://www.britannica.com/place/Russia',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'wg-02',
+      question: '시베리아 남동부에 있고 깊이가 약 1,700m로 지구 담수의 약 20%를 담고 있는 호수는?',
+      choices: ['바이칼호', '카스피해', '빅토리아호', '탕가니카호'],
+      answerIndex: 0,
+      explanation: '바이칼호는 약 2,500만 년 전에 생긴 호수로, 깊이 약 1,700m에 지구 전체 미결빙 담수의 20%를 담고 있다.',
+      source: {
+        name: 'UNESCO World Heritage Centre, "Lake Baikal"',
+        url: 'https://whc.unesco.org/en/list/754/',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'wg-03',
+      question: '네팔의 사가르마타 국립공원이 품고 있는, 2026년 기준 해발 8,848m의 세계 최고봉은?',
+      choices: ['에베레스트', 'K2', '칸첸중가', '안나푸르나'],
+      answerIndex: 0,
+      explanation: '사가르마타 국립공원은 해발 8,848m의 에베레스트가 중심인 지역으로, 눈표범과 레서판다 같은 희귀종이 산다.',
+      source: {
+        name: 'UNESCO World Heritage Centre, "Sagarmatha National Park"',
+        url: 'https://whc.unesco.org/en/list/120/',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'wg-04',
+      question: '현지 이름 모시오아툰야로도 불리는 빅토리아 폭포가 걸쳐 있는 두 나라는?',
+      choices: ['잠비아와 짐바브웨', '케냐와 탄자니아', '앙골라와 나미비아', '모잠비크와 말라위'],
+      answerIndex: 0,
+      explanation: '빅토리아 폭포 세계유산은 잠비아의 모시오아툰야 국립공원과 짐바브웨의 빅토리아 폭포 국립공원에 걸친 초국경 유산이다.',
+      source: {
+        name: 'UNESCO World Heritage Centre, "Mosi-oa-Tunya / Victoria Falls"',
+        url: 'https://whc.unesco.org/en/list/509/',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'wg-05',
+      question: '남아메리카 서쪽 해안을 따라 남북으로 긴 나라 칠레의 수도는?',
+      choices: ['산티아고', '발파라이소', '리마', '부에노스아이레스'],
+      answerIndex: 0,
+      explanation: '칠레의 수도는 나라 중앙 계곡에 있는 산티아고다. 발파라이소는 의회가 있는 항구 도시다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Chile"',
+        url: 'https://www.britannica.com/place/Chile',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'wg-06',
+      question: '약 17,500개의 섬으로 이루어진 동남아시아 국가는?',
+      choices: ['인도네시아', '필리핀', '말레이시아', '파푸아뉴기니'],
+      answerIndex: 0,
+      explanation: '인도네시아는 약 17,500개의 섬으로 이루어져 있고, 그 가운데 7,000개가 넘는 섬에는 사람이 살지 않는다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Indonesia"',
+        url: 'https://www.britannica.com/place/Indonesia',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'wg-07',
+      question: '북대서양에 있고 덴마크 왕국에 속하는, 2026년 기준 세계에서 가장 큰 섬은?',
+      choices: ['그린란드', '뉴기니섬', '보르네오섬', '마다가스카르섬'],
+      answerIndex: 0,
+      explanation: '그린란드는 세계에서 가장 큰 섬으로, 덴마크 왕국에 속하면서 자치정부를 두고 있다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Greenland"',
+        url: 'https://www.britannica.com/place/Greenland',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'wg-08',
+      question: '요르단강이 흘러드는 곳이자, 지구 지표면에서 수면이 가장 낮은 호수는?',
+      choices: ['사해', '카스피해', '아랄해', '투르카나호'],
+      answerIndex: 0,
+      explanation: '사해는 지구 지표면에서 수면 높이가 가장 낮은 호수이며, 물은 거의 전부 북쪽에서 흘러드는 요르단강에서 온다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Dead Sea"',
+        url: 'https://www.britannica.com/place/Dead-Sea',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'wg-09',
+      question: '세계에서 가장 큰 산호초 군락인 그레이트배리어리프가 있는 나라는?',
+      choices: ['오스트레일리아', '인도네시아', '멕시코', '이집트'],
+      answerIndex: 0,
+      explanation: '그레이트배리어리프는 오스트레일리아 북동 해안에 있으며, 산호 400종과 어류 1,500종이 사는 세계 최대 산호초 군락이다.',
+      source: {
+        name: 'UNESCO World Heritage Centre, "Great Barrier Reef"',
+        url: 'https://whc.unesco.org/en/list/154/',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'wg-10',
+      question: '적도 남쪽에서 시작해 아프리카 북동부를 북쪽으로 흐르는 나일강이 흘러드는 바다는?',
+      choices: ['지중해', '홍해', '아라비아해', '흑해'],
+      answerIndex: 0,
+      explanation: '나일강은 적도 남쪽에서 시작해 북쪽으로 약 6,650km를 흘러 지중해로 들어간다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Nile River"',
+        url: 'https://www.britannica.com/place/Nile-River',
+        checkedOn: '2026-10-10'
+      }
+    }
+  ],
   science: [],
   arts_culture: []
 };
