@@ -243,6 +243,132 @@ var QUESTIONS = {
       }
     }
   ],
-  science: [],
+  science: [
+    {
+      id: 'sc-01',
+      question: '속이 빈 껍데기라면 지구 1,000개가 들어갈 만큼 큰, 2026년 기준 태양계에서 가장 큰 행성은?',
+      choices: ['목성', '토성', '천왕성', '해왕성'],
+      answerIndex: 0,
+      explanation: '목성은 태양계에서 가장 큰 행성이면서 자전 주기가 약 9.9시간으로 가장 짧다.',
+      source: {
+        name: 'NASA Science, "Jupiter Facts"',
+        url: 'https://science.nasa.gov/jupiter/jupiter-facts/',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'sc-02',
+      question: '진공에서 빛의 속도로 정의된 값은?',
+      choices: ['299,792,458 m/s', '299,792,458 km/s', '186,282 m/s', '3,000,000 m/s'],
+      answerIndex: 0,
+      explanation: '진공에서의 빛의 속도는 299,792,458 m/s로, 불확도가 없는 정확한 정의값이다.',
+      source: {
+        name: 'NIST, CODATA "speed of light in vacuum"',
+        url: 'https://physics.nist.gov/cgi-bin/cuu/Value?c',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'sc-03',
+      question: '화성이 가진 위성의 수와 이름은?',
+      choices: ['2개 — 포보스와 데이모스', '1개 — 포보스', '3개 — 포보스·데이모스·트리톤', '위성이 없다'],
+      answerIndex: 0,
+      explanation: '화성에는 포보스와 데이모스 두 위성이 있고, 둘 다 붙잡힌 소행성이나 태양계 형성 초기의 잔해로 본다.',
+      source: {
+        name: 'NASA Science, "Moons of Mars"',
+        url: 'https://science.nasa.gov/mars/moons/',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'sc-04',
+      question: '지구에서 달까지의 평균 거리는?',
+      choices: ['약 384,400km', '약 38,440km', '약 3,844,000km', '약 149,600,000km'],
+      answerIndex: 0,
+      explanation: '달은 지구에서 평균 384,400km(약 238,855마일) 떨어져 있다.',
+      source: {
+        name: 'NASA Science, "Moon Facts"',
+        url: 'https://science.nasa.gov/moon/facts/',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'sc-05',
+      question: '지구의 쌍둥이로도 불리며, 2026년 기준 태양계에서 가장 뜨거운 행성은?',
+      choices: ['금성', '수성', '화성', '목성'],
+      answerIndex: 0,
+      explanation: '금성은 태양에서 두 번째로 가까운 행성이며 태양계에서 가장 뜨겁다. 태양에 더 가까운 수성보다도 뜨겁다.',
+      source: {
+        name: 'NASA Science, "Venus Facts"',
+        url: 'https://science.nasa.gov/venus/venus-facts/',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'sc-06',
+      question: 'DNA를 이루는 네 가지 염기는?',
+      choices: [
+        '아데닌, 티민, 구아닌, 시토신',
+        '아데닌, 우라실, 구아닌, 시토신',
+        '아데닌, 티민, 리보스, 인산',
+        '글루코스, 티민, 구아닌, 시토신'
+      ],
+      answerIndex: 0,
+      explanation: 'DNA는 시토신(C)·티민(T)·아데닌(A)·구아닌(G) 네 염기가 인산과 디옥시리보스 골격에 붙은 구조다. 우라실은 RNA의 염기다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "DNA"',
+        url: 'https://www.britannica.com/science/DNA',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'sc-07',
+      question: '혈액에서 산소를 실어 나르는 일을 맡은 단백질은?',
+      choices: ['헤모글로빈', '인슐린', '알부민', '콜라겐'],
+      answerIndex: 0,
+      explanation: '헤모글로빈의 철-포르피린 복합체가 산소 분자와 가역적으로 결합해 혈액에서 산소를 운반한다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Hemoglobin"',
+        url: 'https://www.britannica.com/science/hemoglobin',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'sc-08',
+      question: '광합성에서 녹색식물이 빛 에너지를 바꾸어 저장하는 형태는?',
+      choices: ['화학 에너지', '열 에너지', '전기 에너지', '운동 에너지'],
+      answerIndex: 0,
+      explanation: '광합성은 녹색식물과 일부 생물이 빛 에너지를 화학 에너지로 바꾸는 과정이다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Photosynthesis"',
+        url: 'https://www.britannica.com/science/photosynthesis',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'sc-09',
+      question: '1912년에 대륙이동설을 처음으로 상세하게 내놓은 독일의 기상학자는?',
+      choices: ['알프레트 베게너', '찰스 다윈', '제임스 허턴', '알프레드 윌리스'],
+      answerIndex: 0,
+      explanation: '대륙이동설을 처음으로 상세하고 포괄적으로 제안한 사람은 1912년 독일 기상학자 알프레트 베게너다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Continental drift"',
+        url: 'https://www.britannica.com/science/continental-drift-geology',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'sc-10',
+      question: '지금 지구 대기에서 가장 큰 비중을 차지하는 기체는?',
+      choices: ['질소', '산소', '이산화탄소', '아르곤'],
+      answerIndex: 0,
+      explanation: '지구 대기의 분자 조성은 질소(N2)가 약 78%로 가장 많고, 그다음이 산소다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Atmosphere"',
+        url: 'https://www.britannica.com/science/atmosphere',
+        checkedOn: '2026-10-10'
+      }
+    }
+  ],
   arts_culture: []
 };
