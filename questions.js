@@ -124,7 +124,7 @@ var QUESTIONS = {
   world_geography: [
     {
       id: 'wg-01',
-      question: '2026년 기준 국토 면적이 세계에서 가장 넓은 나라는? (면적 2위 나라의 거의 두 배다)',
+      question: '면적 2위 나라의 거의 두 배 넓이로, 2026년 기준 국토 면적이 세계에서 가장 넓은 나라는?',
       choices: ['러시아', '캐나다', '중국', '미국'],
       answerIndex: 0,
       explanation: '러시아는 면적 2위인 캐나다의 거의 두 배 넓이로, 북아시아 전체와 유럽 동부 3분의 1에 걸쳐 11개 시간대를 지난다.',
@@ -370,5 +370,131 @@ var QUESTIONS = {
       }
     }
   ],
-  arts_culture: []
+  arts_culture: [
+    {
+      id: 'ac-01',
+      question: '레오나르도 다 빈치가 나무판에 유채로 그린 「모나리자」를 소장한 미술관은?',
+      choices: ['루브르 박물관', '오르세 미술관', '우피치 미술관', '프라도 미술관'],
+      answerIndex: 0,
+      explanation: '「모나리자」는 1503~1519년에 레오나르도 다 빈치가 나무판에 유채로 그린 그림으로, 파리 루브르 박물관에 있다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Mona Lisa"',
+        url: 'https://www.britannica.com/topic/Mona-Lisa-painting',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'ac-02',
+      question: '1937년 독일군의 도시 폭격을 다룬 피카소의 대형 흑백 유화 제목은?',
+      choices: ['게르니카', '아비뇽의 처녀들', '절규', '전쟁의 참화'],
+      answerIndex: 0,
+      explanation: '「게르니카」는 1937년 독일군이 스페인 바스크 지역의 도시 게르니카를 폭격한 뒤 피카소가 그린 대형 흑백 유화다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Guernica"',
+        url: 'https://www.britannica.com/topic/Guernica-by-Picasso',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'ac-03',
+      question: '1889년에 언덕 위 마을과 밤하늘을 그린 「별이 빛나는 밤」을 남긴 화가는?',
+      choices: ['빈센트 반 고흐', '폴 고갱', '클로드 모네', '폴 세잔'],
+      answerIndex: 0,
+      explanation: '「별이 빛나는 밤」은 1889년에 네덜란드 화가 빈센트 반 고흐가 그린 작품이다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "The Starry Night"',
+        url: 'https://www.britannica.com/topic/The-Starry-Night',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'ac-04',
+      question: '베토벤 교향곡 9번 마지막 악장에서 합창이 노래하는 시 「환희의 송가」를 쓴 사람은?',
+      choices: ['프리드리히 실러', '요한 볼프강 폰 괴테', '하인리히 하이네', '라이너 마리아 릴케'],
+      answerIndex: 0,
+      explanation: '교향곡 9번의 마지막 악장은 합창과 성악 독창이 프리드리히 실러의 시 「환희의 송가(An die Freude)」를 노래한다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Symphony No. 9 in D Minor, Op. 125"',
+        url: 'https://www.britannica.com/topic/Symphony-No-9-in-D-Minor',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'ac-05',
+      question: '1876년에 발레 「백조의 호수」를 작곡한 러시아 작곡가는?',
+      choices: ['차이콥스키', '스트라빈스키', '프로코피예프', '림스키코르사코프'],
+      answerIndex: 0,
+      explanation: '「백조의 호수」는 1876년 러시아 작곡가 표트르 일리치 차이콥스키가 작곡한 발레다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Swan Lake"',
+        url: 'https://www.britannica.com/topic/Swan-Lake-ballet-by-Tchaikovsky',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'ac-06',
+      question: '유네스코 인류무형문화유산인 판소리는 어떤 구성으로 공연하는가?',
+      choices: [
+        '소리꾼 한 명과 고수 한 명',
+        '소리꾼 한 명과 관현악단',
+        '소리꾼 네 명이 돌아가며 부른다',
+        '탈을 쓴 배우 여러 명'
+      ],
+      answerIndex: 0,
+      explanation: '유네스코는 판소리를 소리꾼(vocalist) 한 명과 고수(drummer) 한 명이 이야기를 노래로 엮어 가는 음악 양식으로 설명한다.',
+      source: {
+        name: 'UNESCO Intangible Cultural Heritage, "Pansori epic chant"',
+        url: 'https://ich.unesco.org/en/RL/pansori-epic-chant-00070',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'ac-07',
+      question: '8세기에 토함산 자락에 만들어졌고 본존불이 바다를 바라보는, 불국사와 함께 유네스코 세계유산에 오른 석굴은?',
+      choices: ['석굴암', '골굴암', '마애여래삼존상', '운주사 석굴'],
+      answerIndex: 0,
+      explanation: '석굴암은 8세기에 토함산 자락에 세워진 석굴로, 항마촉지인을 한 본존불이 바다를 바라본다. 불국사와 함께 세계유산에 등재됐다.',
+      source: {
+        name: 'UNESCO World Heritage Centre, "Seokguram Grotto and Bulguksa Temple"',
+        url: 'https://whc.unesco.org/en/list/736/',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'ac-08',
+      question: '아테네 아크로폴리스에 페리클레스의 계획으로 세워진 건물 가운데, 건축가 이크티노스가 지은 것은?',
+      choices: ['파르테논 신전', '에레크테이온', '프로필라이아', '아테나 니케 신전'],
+      answerIndex: 0,
+      explanation: '아크로폴리스의 파르테논은 이크티노스가 지었고, 프로필라이아는 므네시클레스가 설계했다.',
+      source: {
+        name: 'UNESCO World Heritage Centre, "Acropolis, Athens"',
+        url: 'https://whc.unesco.org/en/list/404/',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'ac-09',
+      question: '셰익스피어의 희곡 「햄릿」에서 햄릿의 어머니 이름은?',
+      choices: ['거트루드', '오필리아', '데스데모나', '코딜리아'],
+      answerIndex: 0,
+      explanation: '햄릿의 어머니는 거트루드다. 오필리아는 햄릿이 사랑한 인물이고, 데스데모나와 코딜리아는 각각 「오셀로」와 「리어왕」의 인물이다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Hamlet"',
+        url: 'https://www.britannica.com/topic/Hamlet-by-Shakespeare',
+        checkedOn: '2026-10-10'
+      }
+    },
+    {
+      id: 'ac-10',
+      question: '1508~1512년에 바티칸 시스티나 예배당의 천장 프레스코를 그린 사람은?',
+      choices: ['미켈란젤로', '라파엘로', '보티첼리', '도나텔로'],
+      answerIndex: 0,
+      explanation: '시스티나 예배당 천장 프레스코는 1508~1512년에 미켈란젤로가 그렸고, 「아담의 창조」가 그 일부다.',
+      source: {
+        name: 'Encyclopaedia Britannica, "Sistine Chapel"',
+        url: 'https://www.britannica.com/topic/Sistine-Chapel',
+        checkedOn: '2026-10-10'
+      }
+    }
+  ]
 };
